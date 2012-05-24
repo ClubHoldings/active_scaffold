@@ -24,6 +24,15 @@ module ActiveScaffold
           eval("self", @configuration_binding).send(name, *args)
         end
       end
+    end    
+
+    def set_up_columns(config, column_def)
+      config.columns        = column_def.collect{|c| c[0]}
+      list.columns.exclude    column_def.collect{|c| c.detect{|v| v == :list  }  ? nil : c[0]}.compact
+      show.columns.exclude    column_def.collect{|c| c.detect{|v| v == :show}    ? nil : c[0]}.compact
+      update.columns.exclude  column_def.collect{|c| c.detect{|v| v == :update}  ? nil : c[0]}.compact
+      create.columns.exclude  column_def.collect{|c| c.detect{|v| v == :create}  ? nil : c[0]}.compact
+      subform.columns.exclude column_def.collect{|c| c.detect{|v| v == :subform} ? nil : c[0]}.compact
     end
   end
 end
