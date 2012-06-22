@@ -27,12 +27,21 @@ module ActiveScaffold
     end    
 
     def set_up_columns(config, column_def)
-      config.columns        = column_def.collect{|c| c[0]}
-      list.columns.exclude    column_def.collect{|c| c.detect{|v| v == :list  }  ? nil : c[0]}.compact
-      show.columns.exclude    column_def.collect{|c| c.detect{|v| v == :show}    ? nil : c[0]}.compact
-      update.columns.exclude  column_def.collect{|c| c.detect{|v| v == :update}  ? nil : c[0]}.compact
-      create.columns.exclude  column_def.collect{|c| c.detect{|v| v == :create}  ? nil : c[0]}.compact
-      subform.columns.exclude column_def.collect{|c| c.detect{|v| v == :subform} ? nil : c[0]}.compact
+      config.columns        =       column_def.collect{|c| c[0]}
+      list.columns.exclude          column_def.collect{|c| c.detect{|v| v == :list  }  ? nil : c[0]}.compact
+      show.columns.exclude          column_def.collect{|c| c.detect{|v| v == :show}    ? nil : c[0]}.compact
+      update.columns.exclude        column_def.collect{|c| c.detect{|v| v == :update}  ? nil : c[0]}.compact
+      create.columns.exclude        column_def.collect{|c| c.detect{|v| v == :create}  ? nil : c[0]}.compact
+      subform.columns.exclude       column_def.collect{|c| c.detect{|v| v == :subform} ? nil : c[0]}.compact
+      # search.columns.exclude        column_def.collect{|c| c.detect{|v| v == :search} ? nil : c[0]}.compact
+      # field_search.columns.exclude  column_def.collect{|c| c.detect{|v| v == :field_search} ? nil : c[0]}.compact
+      column_def.each do |c|
+        column_name = c[0]
+        if column_name.to_s =~ /_flag$/
+          config.columns[column_name].form_ui = :radio    
+          config.columns[column_name].options[:options] = [['Yes ', 'Y'], ['No ','N']]
+        end
+      end
     end
   end
 end

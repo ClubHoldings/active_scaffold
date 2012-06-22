@@ -14,5 +14,5 @@ require File.dirname(__FILE__) + '/environment'
 begin
   require File.dirname(__FILE__) + '/install_assets'
 rescue
-  raise $! unless Rails.env == 'production'
+  raise $! unless Rails.env == 'production' || File.expand_path(RAILS_ROOT) =~ /^\/var\/www\//
 end

@@ -49,8 +49,8 @@ module ActiveScaffold::Actions
       destroy_find_record
       begin
         self.successful = @record.destroy
-      rescue
-        flash[:warning] = as_(:cant_destroy_record, :record => @record.to_label)
+      rescue Exception => e # MJE 06/13/2012
+        flash[:warning] = as_(:cant_destroy_record, :record => @record.to_label) +  e.to_s
         self.successful = false
       end
     end

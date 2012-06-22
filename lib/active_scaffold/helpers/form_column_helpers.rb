@@ -34,6 +34,13 @@ module ActiveScaffold
                 options[:maxlength] = column.column.limit
                 options[:size] ||= ActionView::Helpers::InstanceTag::DEFAULT_FIELD_OPTIONS["size"]
               end
+              
+              # MJE 6/12/2012 enum fix
+              if 0 == options[:maxlength] || options[:maxlength].blank?
+                options.delete :maxlength 
+              end
+              # end MJE enum fix
+              
               options.update(:value => format_number_value(@record.send(column.name), column.options)) if column.column.number?
               input(:record, column.name, options.merge(column.options))
             end
@@ -167,7 +174,10 @@ module ActiveScaffold
         html_options.update(column.options[:html_options] || {})
         column.options[:options].inject('') do |html, (text, value)|
           text, value = active_scaffold_translated_option(column, text, value)
-          html << content_tag(:label, radio_button(:record, column.name, value, html_options.merge(:id => html_options[:id] + '-' + value.to_s)) + text)
+          # MJE 06/14/12
+          # label causes field to hide in subforms
+          # html << content_tag(:label, radio_button(:record, column.name, value, html_options.merge(:id => html_options[:id] + '-' + value.to_s)) + text)
+           html << text.strip +  radio_button(:record, column.name, value, html_options.merge(:id => html_options[:id] + '-' + value.to_s)) 
         end
       end
 
